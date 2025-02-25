@@ -143,7 +143,7 @@ void dispose() {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildElevatedButton('INICIARrrrr', '/home'), // Navegar a HomeScreen
+                        _buildElevatedButton('INICIAR', '/home'), // Navegar a HomeScreen
                         _buildElevatedButton('EMPRESARIO', '/empresario'), // Navegar a EmpresarioFormScreen
                       ],
                     ),
