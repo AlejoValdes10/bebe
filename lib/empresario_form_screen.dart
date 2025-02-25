@@ -9,10 +9,10 @@ class EmpresarioFormScreen extends StatefulWidget {
   const EmpresarioFormScreen({super.key});
 
   @override
-  _EmpresarioFormScreenState createState() => _EmpresarioFormScreenState();
+  EmpresarioFormScreenState createState() => EmpresarioFormScreenState();
 }
 
-class _EmpresarioFormScreenState extends State<EmpresarioFormScreen> {
+class EmpresarioFormScreenState extends State<EmpresarioFormScreen> {
   late VideoPlayerController _controller;
   final Logger _logger = Logger();
 
