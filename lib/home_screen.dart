@@ -9,7 +9,49 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  List<String> favoriteEvents = [];
+  List<Map<String, String>> events = [
+    {"name": "Fiesta Electrónica", "image": "assets/fiesta_electronica.jpg", "localidad": "Chapinero", "fecha": "2025-03-01"},
+    {"name": "Noche de Salsa", "image": "assets/noche_salsa.jpg", "localidad": "Usaquén", "fecha": "2025-03-05"},
+    {"name": "Rock en Vivo", "image": "assets/rock_en_vivo.jpg", "localidad": "Centro", "fecha": "2025-03-10"},
+    {"name": "Festival de Reggaetón", "image": "assets/festival_reggaeton.jpg", "localidad": "Suba", "fecha": "2025-03-15"},
+    {"name": "Fiesta de los 80s", "image": "assets/fiesta_80s.jpg", "localidad": "Kennedy", "fecha": "2025-03-20"},
+  ];
+
+  List<Map<String, String>> filteredEvents = [];
+  List<Map<String, String>> favoriteEvents = [];
+  TextEditingController searchController = TextEditingController();
+  String selectedFilter = "Todos";
+  String selectedDate = "Todas";
+  List<String> localidades = ["Todos", "Chapinero", "Usaquén", "Centro", "Suba", "Kennedy"];
+  List<String> fechas = ["Todas", "2025-03-01", "2025-03-05", "2025-03-10", "2025-03-15", "2025-03-20"];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredEvents = events;
+    searchController.addListener(_filterEvents);
+  }
+
+  void _filterEvents() {
+    String query = searchController.text.toLowerCase();
+    setState(() {
+      filteredEvents = events.where((event) {
+        return event["name"]!.toLowerCase().contains(query) &&
+            (selectedFilter == "Todos" || event["localidad"] == selectedFilter) &&
+            (selectedDate == "Todas" || event["fecha"] == selectedDate);
+      }).toList();
+    });
+  }
+
+  void _toggleFavorite(Map<String, String> event) {
+    setState(() {
+      if (favoriteEvents.contains(event)) {
+        favoriteEvents.remove(event);
+      } else {
+        favoriteEvents.add(event);
+      }
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -21,146 +63,116 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Fiesta Finder")),
-      body: _getScreen(),
+      body: Column(
+        children: [
+          const CircleAvatar(radius: 50, backgroundImage: AssetImage('assets/user.png')),
+          const SizedBox(height: 10),
+          const Text("Usuario", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                labelText: 'Buscar evento...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          Expanded(child: _buildScreenContent()),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.purple,
         unselectedItemColor: Colors.grey,
-        showSelectedLabels: true,
-        showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            label: 'Favoritos',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Buscar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),
     );
   }
 
-  Widget _getScreen() {
-    switch (_selectedIndex) {
-      case 0:
-        return _buildHomeScreen();
-      case 1:
-        return _buildFavoritesScreen();
-      case 2:
-        setState(() => _selectedIndex = 0);
-        return _buildHomeScreen();
-      case 3:
-        return _buildProfileScreen();
-      default:
-        return _buildHomeScreen();
+  Widget _buildScreenContent() {
+    if (_selectedIndex == 1) {
+      return _buildFavoriteScreen();
+    } else {
+      return _buildHomeScreen();
     }
   }
 
   Widget _buildHomeScreen() {
-    List<String> events = List.generate(16, (index) => 'Evento $index');
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: events.length,
-        itemBuilder: (context, index) {
-          String event = events[index];
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                if (favoriteEvents.contains(event)) {
-                  favoriteEvents.remove(event);
-                } else {
-                  favoriteEvents.add(event);
-                }
-              });
+    return GridView.builder(
+      padding: EdgeInsets.all(10),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: filteredEvents.length,
+      itemBuilder: (context, index) {
+        var event = filteredEvents[index];
+        return _buildEventCard(event);
+      },
+    );
+  }
+
+  Widget _buildFavoriteScreen() {
+    return favoriteEvents.isEmpty
+        ? Center(child: Text("No hay eventos favoritos"))
+        : GridView.builder(
+            padding: EdgeInsets.all(10),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: favoriteEvents.length,
+            itemBuilder: (context, index) {
+              var event = favoriteEvents[index];
+              return _buildEventCard(event);
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: favoriteEvents.contains(event)
-                    ? Colors.purple.withOpacity(0.7)
-                    : Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(child: Text(event)),
-            ),
           );
-        },
-      ),
-    );
   }
 
-  Widget _buildFavoritesScreen() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+  Widget _buildEventCard(Map<String, String> event) {
+    bool isFavorite = favoriteEvents.contains(event);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EventDetailScreen(event: event)),
+        );
+      },
+      child: Card(
+        child: Column(
+          children: [
+            Expanded(child: Image.asset(event["image"]!, fit: BoxFit.cover)),
+            Text(event["name"]!, style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("${event["localidad"]} - ${event["fecha"]}"),
+            IconButton(
+              icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: isFavorite ? Colors.red : Colors.grey),
+              onPressed: () => _toggleFavorite(event),
+            ),
+          ],
         ),
-        itemCount: favoriteEvents.length,
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.purple,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(child: Text(favoriteEvents[index], style: TextStyle(color: Colors.white))),
-          );
-        },
       ),
     );
   }
+}
 
-  Widget _buildProfileScreen() {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Center(
-            child: CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
-          ),
-          const SizedBox(height: 20),
-          _buildTextField('Nombre', 'John Smith'),
-          const SizedBox(height: 10),
-          _buildTextField('Correo', 'john.smith@example.com'),
-          const SizedBox(height: 10),
-          _buildTextField('Contraseña', '********', obscureText: true),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text('Actualizar Información'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextField(String label, String value, {bool obscureText = false}) {
-    return TextField(
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: value,
-        border: const OutlineInputBorder(),
-      ),
+class EventDetailScreen extends StatelessWidget {
+  final Map<String, String> event;
+  const EventDetailScreen({required this.event});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(event["name"]!)),
+      body: Center(child: Text("Detalles del evento")),
     );
   }
 }

@@ -86,7 +86,7 @@ class EmpresarioFormScreenState extends State<EmpresarioFormScreen> {
                       style: AppStyles.titleTextStyle.copyWith(
                         color: const Color.fromARGB(255, 0, 0, 0),
                       ),
-                      child: const Text('FIESTA FINDER'),
+                      child: const Text('EMPRESARIO'),
                     ),
                     const SizedBox(height: 20),
                     // Campos de texto del formulario
