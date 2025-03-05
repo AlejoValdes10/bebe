@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppStyles {
+  static ButtonStyle get buttonStyle => elevatedButtonStyle;
   // Uso de Color(0xAARRGGBB) para aplicar opacidad más directamente
   static final BoxDecoration containerDecoration = BoxDecoration(
     color: const Color(0xD9FFFFFF), // Opacidad 0.85 equivalente a .withOpacity(0.8)

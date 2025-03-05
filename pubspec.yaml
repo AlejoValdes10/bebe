@@ -17,6 +17,7 @@ dependencies:
   cloud_firestore: ^5.6.4
   google_maps_flutter: ^2.5.0
   share_plus: ^7.2.1
+  flutter_svg: ^2.0.4
   
 
 dev_dependencies:
@@ -29,3 +30,4 @@ flutter:
   assets:
     - assets/ff.png
     - assets/inicio3.mp4
+    - assets/spinner.svg 

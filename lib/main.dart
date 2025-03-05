@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Importar el paquete flutter_svg
 import 'styles.dart'; // Asegúrate de que la ruta sea correcta
 
 // Pantallas adicionales
@@ -20,15 +21,49 @@ class FiestaFinderApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const FiestaFinderScreen(),
+      home: const SplashScreen(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // Definir las rutas
       routes: {
         '/home': (context) => const HomeScreen(),
         '/empresario': (context) => const EmpresarioFormScreen(),
       },
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  SplashScreenState createState() => SplashScreenState();
+}
+
+class SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const FiestaFinderScreen()),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SvgPicture.asset(
+          'assets/spinner.svg',
+          width: 100,
+          height: 100,
+        ),
+      ),
     );
   }
 }
@@ -42,45 +77,41 @@ class FiestaFinderScreen extends StatefulWidget {
 
 class FiestaFinderScreenState extends State<FiestaFinderScreen> {
   late VideoPlayerController _controller;
-
-  // Crear instancia del logger
   final Logger _logger = Logger();
-
-  @override
-void initState() {
-  super.initState();
-
-  // Inicializa el controlador de video
-  _controller = VideoPlayerController.asset('assets/inicio3.mp4')
-    ..initialize().then((_) {
-      if (mounted) {
-        setState(() {}); // Actualiza la interfaz una vez que el video se haya inicializado
-        _controller.setLooping(true); // Establece el video para que se repita
-        _controller.play(); // Reproduce el video automáticamente
-      }
-    }).catchError((e) {
-      // Usar el logger para imprimir el error en lugar de print
-      _logger.e("Error al cargar el video: $e");
-    });
-}
-
-@override
-void dispose() {
-  _controller.dispose(); // Asegúrate de liberar los recursos al salir
-  super.dispose();
-}
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
 
+  String? selectedDocumentType;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/inicio3.mp4')
+      ..initialize().then((_) {
+        if (mounted) {
+          setState(() {});
+          _controller.setLooping(true);
+          _controller.play();
+        }
+      }).catchError((e) {
+        _logger.e("Error al cargar el video: $e");
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo del video
           Positioned.fill(
             child: _controller.value.isInitialized
                 ? FittedBox(
@@ -88,12 +119,11 @@ void dispose() {
                     child: SizedBox(
                       width: _controller.value.size.width,
                       height: _controller.value.size.height,
-                      child: VideoPlayer(_controller), // Muestra el video aquí
+                      child: VideoPlayer(_controller),
                     ),
                   )
-                : const Center(child: CircularProgressIndicator()),
+                : Container(),
           ),
-          // Aquí va el contenido principal
           Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -103,7 +133,6 @@ void dispose() {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Logo o imagen
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: const Duration(seconds: 2),
@@ -121,7 +150,6 @@ void dispose() {
                       child: const Text('FIESTA FINDER'),
                     ),
                     const SizedBox(height: 20),
-                    // Campos de texto
                     _buildTextField(nameController, 'Nombre'),
                     const SizedBox(height: 10),
                     _buildTextField(emailController, 'Correo', keyboardType: TextInputType.emailAddress),
@@ -129,22 +157,26 @@ void dispose() {
                     _buildTextField(passwordController, 'Contraseña', obscureText: true),
                     const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
+                      value: selectedDocumentType,
                       items: const [
                         DropdownMenuItem(value: 'opcion1', child: Text('Cédula')),
                         DropdownMenuItem(value: 'opcion2', child: Text('Cédula Extranjera')),
                       ],
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        setState(() {
+                          selectedDocumentType = value;
+                        });
+                      },
                       decoration: AppStyles.textFieldDecoration('Selecciona...'),
                     ),
                     const SizedBox(height: 10),
                     _buildTextField(numberController, 'Número', keyboardType: TextInputType.number),
                     const SizedBox(height: 20),
-                    // Botones para navegar
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildElevatedButton('INICIAR', '/home'), // Navegar a HomeScreen
-                        _buildElevatedButton('EMPRESARIO', '/empresario'), // Navegar a EmpresarioFormScreen
+                        _buildElevatedButton('INICIAR', '/home'),
+                        _buildElevatedButton('EMPRESARIO', '/empresario'),
                       ],
                     ),
                   ],
@@ -157,26 +189,22 @@ void dispose() {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hintText, {bool obscureText = false, TextInputType? keyboardType}) {
+  Widget _buildTextField(TextEditingController controller, String labelText, {bool obscureText = false, TextInputType keyboardType = TextInputType.text}) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
-      decoration: AppStyles.textFieldDecoration(hintText),
+      decoration: AppStyles.textFieldDecoration(labelText),
     );
   }
 
   Widget _buildElevatedButton(String text, String route) {
     return ElevatedButton(
       onPressed: () {
-        // Navegar a la ruta usando Navigator.pushReplacement para evitar mantener el estado anterior
-        Navigator.pushReplacementNamed(context, route);
+        Navigator.pushNamed(context, route);
       },
-      style: AppStyles.elevatedButtonStyle,
-      child: Text(
-        text,
-        style: const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-      ),
+      style: AppStyles.buttonStyle,
+      child: Text(text),
     );
   }
 }
