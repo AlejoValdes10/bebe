@@ -9,6 +9,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.53"
+<<<<<<< HEAD
   archive:
     dependency: transitive
     description:
@@ -17,6 +18,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.1"
+=======
+>>>>>>> b8f4ff7 (first commit)
   args:
     dependency: transitive
     description:
@@ -705,10 +708,17 @@ packages:
     dependency: transitive
     description:
       name: video_player_android
+<<<<<<< HEAD
       sha256: d949a83d1a333178eb3a9683f70afa41b7771c2bfa4cedd894fe836942de06b1
       url: "https://pub.dev"
     source: hosted
     version: "2.8.1"
+=======
+      sha256: "412e0b474c79bb7df14bf25d2b278a1e025760d3a1aaaa9fd712d9d17f589151"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.8.0"
+>>>>>>> b8f4ff7 (first commit)
   video_player_avfoundation:
     dependency: transitive
     description:
