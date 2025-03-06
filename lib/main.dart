@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // Importar el paquete flutter_svg
-import 'styles.dart'; // Asegúrate de que la ruta sea correcta
-
-// Pantallas adicionales
+import 'package:lottie/lottie.dart'; // Reemplazamos flutter_svg por Lottie
+import 'styles.dart';
 import 'home_screen.dart';
-import 'empresario_form_screen.dart'; // Importamos el formulario de empresario
-
-// Importar logger para mejorar el manejo de logs en lugar de print
+import 'empresario_form_screen.dart';
 import 'package:logger/logger.dart';
 
 void main() {
@@ -22,9 +18,7 @@ class FiestaFinderApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       routes: {
         '/home': (context) => const HomeScreen(),
         '/empresario': (context) => const EmpresarioFormScreen(),
@@ -44,7 +38,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 4), () { // ⏳ Más tiempo en pantalla
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -57,16 +51,32 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black, // 🎨 Fondo negro para visibilidad
       body: Center(
-        child: SvgPicture.asset(
-          'assets/spinner.svg',
+        child: Lottie.asset(
+          'assets/spinner.json',
+          width: 200,  // 📏 Tamaño más grande
+          height: 200,
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+}
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Lottie.asset(
+          'assets/spinner.json', // Archivo Lottie animado
           width: 100,
           height: 100,
         ),
       ),
     );
   }
-}
 
 class FiestaFinderScreen extends StatefulWidget {
   const FiestaFinderScreen({super.key});
@@ -83,7 +93,6 @@ class FiestaFinderScreenState extends State<FiestaFinderScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
-
   String? selectedDocumentType;
 
   @override
@@ -92,9 +101,10 @@ class FiestaFinderScreenState extends State<FiestaFinderScreen> {
     _controller = VideoPlayerController.asset('assets/inicio3.mp4')
       ..initialize().then((_) {
         if (mounted) {
-          setState(() {});
-          _controller.setLooping(true);
-          _controller.play();
+          setState(() {
+            _controller.setLooping(true);
+            _controller.play();
+          });
         }
       }).catchError((e) {
         _logger.e("Error al cargar el video: $e");
