@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:video_player/video_player.dart';
 import 'package:lottie/lottie.dart'; // Reemplazamos flutter_svg por Lottie
 import 'styles.dart';
@@ -7,6 +8,16 @@ import 'empresario_form_screen.dart';
 import 'package:logger/logger.dart';
 
 void main() {
+=======
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+>>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
   runApp(const FiestaFinderApp());
 }
 
@@ -16,6 +27,7 @@ class FiestaFinderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+<<<<<<< HEAD
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
       theme: ThemeData(primarySwatch: Colors.blue),
@@ -23,10 +35,18 @@ class FiestaFinderApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/empresario': (context) => const EmpresarioFormScreen(),
       },
+=======
+      title: 'Fiesta Finder',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+>>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
     );
   }
 }
 
+<<<<<<< HEAD
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -47,10 +67,15 @@ class SplashScreenState extends State<SplashScreen> {
       }
     });
   }
+=======
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+>>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       backgroundColor: Colors.black, // 🎨 Fondo negro para visibilidad
       body: Center(
         child: Lottie.asset(
@@ -218,3 +243,12 @@ class FiestaFinderScreenState extends State<FiestaFinderScreen> {
     );
   }
 }
+=======
+      appBar: AppBar(title: const Text('Bienvenido a Fiesta Finder')),
+      body: const Center(
+        child: Text('¡Encuentra las mejores fiestas!'),
+      ),
+    );
+  }
+}
+>>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
