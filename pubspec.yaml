@@ -21,15 +21,18 @@ dependencies:
   lottie: ^2.6.0
   chewie: ^1.7.0
   
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.9.2  # Especifica la versión de flutter_launcher_icons
 
 flutter:
   uses-material-design: true
   assets:
     - assets/ff.png
     - assets/inicio3.mp4
-    - assets/spinner.json 
+    - assets/spinner.json
+    - assets/user.json
+
+

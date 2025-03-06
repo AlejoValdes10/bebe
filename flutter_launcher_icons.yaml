@@ -1,0 +1,5 @@
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/ff.png"
+  remove_alpha_ios: true # Ruta de tu ícono de la aplicación
