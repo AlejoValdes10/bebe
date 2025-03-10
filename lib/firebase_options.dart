@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -54,6 +51,7 @@ class DefaultFirebaseOptions {
     appId: '1:815596252512:android:53130bb84e2b54fb82c205',
     messagingSenderId: '815596252512',
     projectId: 'fiestafinder2006',
+    databaseURL: 'https://fiestafinder2006-default-rtdb.firebaseio.com',
     storageBucket: 'fiestafinder2006.firebasestorage.app',
   );
 
@@ -62,7 +60,20 @@ class DefaultFirebaseOptions {
     appId: '1:815596252512:ios:c499fdbd5627919f82c205',
     messagingSenderId: '815596252512',
     projectId: 'fiestafinder2006',
+    databaseURL: 'https://fiestafinder2006-default-rtdb.firebaseio.com',
     storageBucket: 'fiestafinder2006.firebasestorage.app',
     iosBundleId: 'com.example.fiestafinderflutter',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCOgQNgWk2Ucf7hxpGMSkfHPwFHzfMiho4',
+    appId: '1:815596252512:web:9f1d09e7702f4f6682c205',
+    messagingSenderId: '815596252512',
+    projectId: 'fiestafinder2006',
+    authDomain: 'fiestafinder2006.firebaseapp.com',
+    databaseURL: 'https://fiestafinder2006-default-rtdb.firebaseio.com',
+    storageBucket: 'fiestafinder2006.firebasestorage.app',
+    measurementId: 'G-YVE0GKE6XR',
+  );
+  
 }

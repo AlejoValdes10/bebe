@@ -20,6 +20,7 @@ dependencies:
   flutter_svg: ^2.0.4
   lottie: ^2.6.0
   chewie: ^1.7.0
+  firebase_auth: ^5.5.1
   
 dev_dependencies:
   flutter_test:

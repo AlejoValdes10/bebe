@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
+import 'package:firebase_core/firebase_core.dart';
 import 'package:video_player/video_player.dart';
-import 'package:lottie/lottie.dart'; // Reemplazamos flutter_svg por Lottie
+import 'package:lottie/lottie.dart';
+import 'package:logger/logger.dart';
+import 'firebase_options.dart';
 import 'styles.dart';
 import 'home_screen.dart';
 import 'empresario_form_screen.dart';
-import 'package:logger/logger.dart';
 
-void main() {
-=======
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+
+import 'firebase_service.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
->>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
   runApp(const FiestaFinderApp());
 }
 
@@ -27,26 +26,18 @@ class FiestaFinderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-<<<<<<< HEAD
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      title: 'Fiesta Finder',
       theme: ThemeData(primarySwatch: Colors.blue),
+      home: const SplashScreen(),
       routes: {
         '/home': (context) => const HomeScreen(),
         '/empresario': (context) => const EmpresarioFormScreen(),
       },
-=======
-      title: 'Fiesta Finder',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomeScreen(),
->>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
     );
   }
 }
 
-<<<<<<< HEAD
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -58,7 +49,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 4), () { // ⏳ Más tiempo en pantalla
+    Future.delayed(const Duration(seconds: 4), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -67,20 +58,15 @@ class SplashScreenState extends State<SplashScreen> {
       }
     });
   }
-=======
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
->>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
-      backgroundColor: Colors.black, // 🎨 Fondo negro para visibilidad
+      backgroundColor: Colors.black,
       body: Center(
         child: Lottie.asset(
           'assets/spinner.json',
-          width: 200,  // 📏 Tamaño más grande
+          width: 200,
           height: 200,
           fit: BoxFit.contain,
         ),
@@ -88,20 +74,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Lottie.asset(
-          'assets/spinner.json', // Archivo Lottie animado
-          width: 100,
-          height: 100,
-        ),
-      ),
-    );
-  }
 
 class FiestaFinderScreen extends StatefulWidget {
   const FiestaFinderScreen({super.key});
@@ -243,12 +215,3 @@ class FiestaFinderScreenState extends State<FiestaFinderScreen> {
     );
   }
 }
-=======
-      appBar: AppBar(title: const Text('Bienvenido a Fiesta Finder')),
-      body: const Center(
-        child: Text('¡Encuentra las mejores fiestas!'),
-      ),
-    );
-  }
-}
->>>>>>> 42ea597 (Proyecto Fiesta Finder con Firebase)

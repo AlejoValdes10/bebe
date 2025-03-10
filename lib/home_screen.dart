@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+
+import 'firebase_service.dart';
+
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -371,6 +375,7 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+      ///////////////FirebaseService().guardarPrueba();
     filteredEvents = events;
     searchController.addListener(_filterEvents);
   }
@@ -610,3 +615,6 @@ class EventDetailScreen extends StatelessWidget {
     );
   }
 }
+
+
+
